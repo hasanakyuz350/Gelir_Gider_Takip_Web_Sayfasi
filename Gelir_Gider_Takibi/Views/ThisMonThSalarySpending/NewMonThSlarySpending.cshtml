@@ -1,0 +1,96 @@
+﻿@model ThismonThsalary_spendingModels
+
+@{
+    ViewData["Title"] = Model.ThismonThsalary.monThname + " Ayı Harcaması";
+}
+
+@section _Header {
+    @await Html.PartialAsync("_Header");
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger text-center" id="error-msg">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="container my-5">
+
+    <h2 class="text-center mb-4">KaTegori Bazlı Harcama Girisi</h2>
+
+    <div class="row text-center mb-4">
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-info shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Ay</h5>
+                    <p class="card-text fs-5 fw-bold text-info">@Model.ThismonThsalary.monThname</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-secondary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Yıl</h5>
+                    <p class="card-text fs-5 fw-bold text-secondary">@Model.ThismonThsalary.year</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card border-primary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Maaş</h5>
+                    <p class="card-text fs-5 fw-bold text-primary">@Model.ThismonThsalary.salary ₺</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <form asp-controller="ThisMonThSalarySpending" asp-action="NewMonThSlarySpending" method="post">
+        <input type="hidden" name="monThID" value="@Model.ThismonThsalary.monThID" />
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <table class="table table-bordered table-striped shadow-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>KaTegori</th>
+                            <th>Harcama TuTarı (₺)</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (int i = 0; i < Model.caTegoryspending.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Model.caTegoryspending[i].caTegoryname
+
+                                    <input type="hidden" name="caTegoryID[@i]" value="@Model.caTegoryspending[i].caTegoryID" />
+                                </td>
+
+                                <td>
+                                    <input type="number" class="form-control" name="amounT[@i]" min="0" required />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-success">KaydeT</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+

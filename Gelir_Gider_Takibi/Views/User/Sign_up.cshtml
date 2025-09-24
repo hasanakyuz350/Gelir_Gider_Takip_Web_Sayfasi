@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "KayıT Ol";
+}
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow p-4" style="width: 100%; max-width: 450px;">
+
+        <h3 class="text-center mb-4">KayıT Ol</h3>
+
+        <form asp-controller="User" asp-action="Sign_up" method="post">
+            <div class="mb-2">
+                <label for="name" class="form-label">Adınız</label>
+                <input type="text" class="form-control" name="Name" required>
+            </div>
+
+            <div class="mb-2">
+                <label for="surname" class="form-label">Soyadınız</label>
+                <input type="text" class="form-control" name="Surname" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" class="form-control" name="Email" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Sifre</label>
+                <input type="password" class="form-control" name="Password" required>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">KayıT Ol</button>
+            </div>
+        </form>
+
+        <div class="text-center mt-3">
+            <a asp-controller="User" asp-action="Sign_in">ZaTen hesabınız var mı? Giris Yap</a>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,231 @@
+﻿@model List<ThismonThsalary_spendingModels>
+
+@section _Header {
+    @await Html.PartialAsync("_Header");
+}
+
+@{
+    bool? bosmu;
+    if (ViewBag.BosMu != null && ViewBag.BosMu)
+    {
+        bosmu = ViewBag.BosMu;
+    }
+    else
+    {
+        bosmu = null;
+    }
+}
+
+@if (bosmu == true)
+{
+    <div class="alert alert-warning text-center mt-5">
+        Henüz hic maas ve harcama bilgisi girmediniz. Yeni bir ay olusTurmak isTer misiniz?
+    </div>
+    <div class="text-center">
+        <a href="/ThisMonThSalary/NewMonThSalary" class="btn btn-success">Yeni Ay Ekle</a>
+    </div>
+    return;
+}
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var models in Model)
+    {
+        var spendinglabel = models.ThismonThsalaryspending.Select(c => c.caTegory.caTegoryname).ToList();
+        var spendingamounT = models.ThismonThsalaryspending.Select(c => c.amounT).ToList();
+
+        var labelsJson = System.Text.Json.JsonSerializer.Serialize(spendinglabel);
+        var daTaJson = System.Text.Json.JsonSerializer.Serialize(spendingamounT);
+
+
+        ViewData["Title"] = models.ThismonThsalary.monThname + models.ThismonThsalary.year + " AYI ÖZETİ";
+
+        var ToTalmoney = 0;
+
+        foreach (var vars in models.ThismonThsalaryspending)
+        {
+            ToTalmoney += (int)vars.amounT;
+        }
+        <div class="container my-5">
+            <h2 class="text-center mb-4">@models.ThismonThsalary.monThname @models.ThismonThsalary.year AYINA AİT ÖZET</h2>
+
+            <div class="row text-center mb-4">
+
+                <div class="col-md-4 mb-3">
+                    <div class="card border-primary shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Maas</h5>
+                            <p class="card-text fs-4 text-primary fw-bold">@models.ThismonThsalary.salary ₺</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <div class="card border-danger shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Toplam Harcama</h5>
+                            @if (models.ThismonThsalaryspending != null)
+                            {
+                                <p class="card-text fs-4 text-danger fw-bold">@ToTalmoney ₺</p>
+                            }
+                            else
+                            {
+                                <p class="text-muted">Henüz harcama yapılmamıs</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-3 d-flex flex-column justify-content-between">
+                    <div class="card border-success shadow-sm mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Kalan</h5>
+                            @if (models.ThismonThsalaryspending != null)
+                            {
+                                var kalan = models.ThismonThsalary.salary - ToTalmoney;
+                                <p class="card-text fs-4 text-success fw-bold">@kalan ₺</p>
+                            }
+                            else
+                            {
+                                <p class="text-muted">Harcama olmadığından kalan gösTerilemiyor</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-3">
+                    <form asp-controller="ThisMonThSalarySpending" asp-action="NewMonThSlarySpending" method="get" class="mb-2">
+                        <input type="hidden" name="monThID" value="@models.ThismonThsalary.monThID" />
+                        <button type="submit" class="btn btn-warning w-100">Harcama Ekle</button>
+                    </form>
+                    <form asp-controller="ThisMonThSalary" asp-action="deleTemonTh" method="post" class="mb-2">
+                        <input type="hidden" name="monThID" value="@models.ThismonThsalary.monThID" />
+                        <button type="submit" class="btn btn-danger w-100">Sil</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <h5 class="text-center mb-3">Kategori Dağılımı</h5>
+                    <div id="chart-data-@models.ThismonThsalary.monThID" data-labels='@labelsJson' data-values='@daTaJson'></div>
+                    <canvas id="spendingChart-@models.ThismonThsalary.monThID"></canvas>
+                </div>
+
+                <div class="col-md-6">
+                    <h5 class="text-center mb-3">KaTegori LisTesi</h5>
+                    <ul class="list-group">
+                        @{
+                            decimal reminSalary = models.ThismonThsalary.salary;
+                            int index = 0;
+                        }
+
+                        @if (models != null && models.ThismonThsalaryspending != null)
+                        {
+                            @foreach (var vars in models.ThismonThsalaryspending)
+                            {
+                                if (vars != null)
+                                {
+                                    decimal yuzde;
+                                    if (reminSalary > 0)
+                                    {
+                                        yuzde = (vars.amounT / reminSalary) * 100;
+                                    }
+                                    else
+                                    {
+                                        yuzde = 0;
+                                    }
+
+                                    string satirRenk;
+
+                                    if (index % 2 == 0)
+                                    {
+                                        satirRenk = "white";
+                                    }
+                                    else
+                                    {
+                                        satirRenk = "gray";
+                                    }
+
+                                    <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color:@satirRenk;">
+                                        @vars.caTegory.caTegoryname
+                                        <span>
+                                            %@yuzde.ToString("0.0")
+                                        </span>
+                                    </li>
+
+                                    reminSalary -= vars.amounT;
+                                    index++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <li class="list-group-item text-center text-muted">Henüz harcama kaydı yok.</li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        var sayac = 0;
+        @if (sayac < Model.Count - 1)
+        {
+            <hr class="my-4" />
+            sayac++;
+        }
+    }
+}
+}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        @foreach (var models in Model)
+        {
+                                     var monThID = @models.ThismonThsalary.monThID;
+           <text>
+               (function() {
+                   var daTaDiv = document.getElementById('chart-data-' + @models.ThismonThsalary.monThID);
+                   var graphics = document.getElementById('spendingChart-' + @models.ThismonThsalary.monThID);
+                   if (!daTaDiv || !graphics)
+                   {
+                       return;
+                   }
+
+                   var labels = JSON.parse(daTaDiv.dataset.labels);
+                   var values = JSON.parse(daTaDiv.dataset.values);
+
+                   new Chart(graphics, {
+                       type: 'pie',
+                       data: {
+                           labels: labels,
+                           datasets: [{
+                               data: values,
+                               backgroundColor: [
+                                   'red', 'blue', 'yellow', 'cyan', 'purple',
+                                   'orange', 'pink', 'magenta', 'green', 'brown'
+                               ],
+                               borderWidth: 1
+                           }]
+                       },
+                       options: {
+                           plugins: {
+                               tooltip: {
+                                   callbacks: {
+                                       label: function (context) {
+                                           var value = context.raw;
+                                           return `${context.label}: ${value} ₺`;
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                   });
+               })();
+           </text>
+        }
+    });
+</script>
+

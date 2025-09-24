@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Yeni Ay Ekle";
+}
+
+@section _Header {
+    @await Html.PartialAsync("_Header");
+}
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
+
+        <h3 class="text-center mb-4">Yeni Ay ve Maas Bilgisi</h3>
+
+        <form asp-controller="ThisMonThSalary" asp-action="NewMonThSalary" method="post">
+
+            <div class="mb-3">
+                <label for="monTh" class="form-label">Ay</label>
+
+                <select class="form-select" name="monTh" required>
+                    <option selected disabled>Ay Seciniz</option>
+                    <option value="Ocak">Ocak</option>
+                    <option value="Şubat">Şubat</option>
+                    <option value="Mart">Mart</option>
+                    <option value="Nisan">Nisan</option>
+                    <option value="Mayıs">Mayıs</option>
+                    <option value="Haziran">Haziran</option>
+                    <option value="Temmuz">Temmuz</option>
+                    <option value="Ağustos">Ağustos</option>
+                    <option value="Eylül">Eylül</option>
+                    <option value="Ekim">Ekim</option>
+                    <option value="Kasım">Kasım</option>
+                    <option value="Aralık">Aralık</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="year" class="form-label">Yıl</label>
+                <input type="number" class="form-control" name="year" min="1800" max="2200" required />
+            </div>
+
+            <div class="mb-3">
+                <label for="salary" class="form-label">Maas TuTarı (₺)</label>
+                <input type="number" class="form-control" name="salary" min="0" required />
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Ayı Ekle</button>
+            </div>
+
+        </form>
+    </div>
+</div>

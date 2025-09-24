@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Giris Yap";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center" id="success-msg">
+        @TempData["SuccessMessage"]
+    </div>
+
+    <script>
+        setTimeout(function() {
+            var successMsg = document.getElementById("success-msg");
+
+            if (successMsg !== null && successMsg !== undefined) {
+                successMsg.remove();
+            }
+        }, 5000);
+    </script>
+}
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
+
+        <h3 class="text-center mb-4">Giris Yap</h3>
+        
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.Error
+            </div>
+        }
+        
+        <form asp-controller="User" asp-action="Sign_in" method="post">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Sifre</label>
+                <input type="password" class="form-control" name="password" required>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Giris Yap</button>
+            </div>
+        </form>
+
+        <div class="text-center mt-3">
+            <p>Hesabın yok mu?</p>
+            <a asp-controller="User" asp-action="Sign_up"> KayıT ol</a>
+        </div>
+
+    </div>
+</div>

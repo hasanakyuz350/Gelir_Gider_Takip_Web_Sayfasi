@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Gelir_Gider_Takibi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0f8f0b85c51320d64272d687b98872fb89294e53")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9df36c7780561fc36688f11835bd7031021f1e4a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Gelir_Gider_Takibi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Gelir_Gider_Takibi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
